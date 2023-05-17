@@ -1,14 +1,10 @@
 #include "s21_matrix_oop.h"
 
-S21Matrix::S21Matrix() :
-        rows_(1),
-        cols_(1) {
+S21Matrix::S21Matrix() : rows_(1), cols_(1) {
     this->CreateMatrix(rows_, cols_);
 }
 
-S21Matrix::~S21Matrix() {
-    DeleteMatrix();
-}
+S21Matrix::~S21Matrix() { DeleteMatrix(); }
 
 void S21Matrix::CreateMatrix(int rows, int cols) {
     this->rows_ = rows;
@@ -36,7 +32,8 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
     }
 }
 
-S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.cols_) {
+S21Matrix::S21Matrix(const S21Matrix &other)
+        : rows_(other.rows_), cols_(other.cols_) {
     this->CreateMatrix(other.rows_, other.cols_);
     for (int i = 0; i < other.rows_; ++i) {
         for (int j = 0; j < other.cols_; ++j) {
@@ -89,6 +86,20 @@ void S21Matrix::SubMatrix(const S21Matrix &other) {
             for (int j = 0; j < this->cols_; ++j) {
                 this->matrix_[i][j] -= other.matrix_[i][j];
             }
+        }
+    }
+}
+
+/**
+ * @brief Multiply matrix by number
+ * @param number to multiply
+ * @return result of multiplication
+ * @note This function is not a member of the class
+ */
+void S21Matrix::MulNumber(const double number) {
+    for (int i = 0; i < this->rows_; ++i) {
+        for (int j = 0; j < this->cols_; ++j) {
+            this->matrix_[i][j] *= number;
         }
     }
 }
