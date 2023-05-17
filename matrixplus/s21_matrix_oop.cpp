@@ -53,3 +53,24 @@ S21Matrix::S21Matrix(S21Matrix &&other) {
     other.cols_ = 0;
     other.matrix_ = nullptr;
 }
+
+bool S21Matrix::EqMatrix(const S21Matrix &other) {
+    if (this->rows_ != other.rows_ || this->cols_ != other.cols_) {
+        return false;
+    } else {
+        for (int i = 0; i < this->rows_; ++i) {
+            for (int j = 0; j < this->cols_; ++j) {
+                if (std::abs(this->matrix_[i][j] - other.matrix_[i][j]) > EPSILON) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+ int main() {
+    S21Matrix m1(3,3);
+    S21Matrix m2(3, 3);
+    std::cout << m1.EqMatrix(m2);
+}
