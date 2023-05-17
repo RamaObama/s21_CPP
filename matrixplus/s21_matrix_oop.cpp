@@ -91,9 +91,9 @@ void S21Matrix::SubMatrix(const S21Matrix &other) {
 }
 
 /**
- * @brief Multiply matrix by number
- * @param number to multiply
- * @return result of multiplication
+ * @brief Multiply matrix by number (A * number) = B (this * number = result)
+ * @param number to multiply by this matrix (A)
+ * @return result of multiplication (B)
  * @note This function is not a member of the class
  */
 void S21Matrix::MulNumber(const double number) {
@@ -101,5 +101,33 @@ void S21Matrix::MulNumber(const double number) {
         for (int j = 0; j < this->cols_; ++j) {
             this->matrix_[i][j] *= number;
         }
+    }
+}
+
+/**
+ * @brief Multiply matrix by matrix (matrix multiplication) (A * B) = C (this * other = result)
+ * @param other matrix to multiply by this matrix (B)
+ * @return result of multiplication (C)
+ * @note This function is not a member of the class
+ */
+void S21Matrix::MulMatrix(const S21Matrix &other) {
+    if (this->cols_ != other.rows_) {
+        throw std::invalid_argument("Invalid matrix size");
+    } else {
+        S21Matrix result(this->rows_, other.cols_);
+        for (int i = 0; i < this->rows_; ++i) {
+            for (int j = 0; j < other.cols_; ++j) {
+                for (int k = 0; k < this->cols_; ++k) {
+                    result.matrix_[i][j] += this->matrix_[i][k] * other.matrix_[k][j];
+                }
+            }
+        }
+        this->DeleteMatrix();
+        this->rows_ = result.rows_;
+        this->cols_ = result.cols_;
+        this->matrix_ = result.matrix_;
+        result.rows_ = 0;
+        result.cols_ = 0;
+        result.matrix_ = nullptr;
     }
 }
