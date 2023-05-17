@@ -35,3 +35,12 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
         this->CreateMatrix(rows, cols);
     }
 }
+
+S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.cols_) {
+    this->CreateMatrix(other.rows_, other.cols_);
+    for (int i = 0; i < other.rows_; ++i) {
+        for (int j = 0; j < other.cols_; ++j) {
+            this->matrix_[i][j] = other.matrix_[i][j];
+        }
+    }
+}
