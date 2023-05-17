@@ -24,4 +24,14 @@ void S21Matrix::DeleteMatrix() {
         delete[] this->matrix_[i];
     }
     delete[] this->matrix_;
+    this->rows_ = 0;
+    this->cols_ = 0;
+}
+
+S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
+    if (rows < 1 || cols < 1) {
+        throw std::invalid_argument("Invalid matrix size");
+    } else {
+        this->CreateMatrix(rows, cols);
+    }
 }
