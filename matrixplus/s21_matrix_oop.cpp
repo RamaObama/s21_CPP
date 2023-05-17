@@ -44,3 +44,12 @@ S21Matrix::S21Matrix(const S21Matrix &other) : rows_(other.rows_), cols_(other.c
         }
     }
 }
+
+S21Matrix::S21Matrix(S21Matrix &&other) {
+    this->rows_ = other.rows_;
+    this->cols_ = other.cols_;
+    this->matrix_ = other.matrix_;
+    other.rows_ = 0;
+    other.cols_ = 0;
+    other.matrix_ = nullptr;
+}
