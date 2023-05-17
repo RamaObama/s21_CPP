@@ -1,11 +1,25 @@
 #include "s21_matrix_oop.h"
 
+/**
+ * @brief Default constructor and initialize matrix with zeros (0) by default
+ * @note This function is not a member of the class
+ */
 S21Matrix::S21Matrix() : rows_(1), cols_(1) {
     this->CreateMatrix(rows_, cols_);
 }
 
+/**
+ * @brief Destructor and delete matrix from memory (free memory)
+ * @note This function is not a member of the class
+ */
 S21Matrix::~S21Matrix() { DeleteMatrix(); }
 
+/**
+ * @brief Allocate memory for matrix (allocate memory for rows and columns) and initialize matrix with zeros (0) by default
+ * @param rows number of rows (default = 1)
+ * @param cols number of columns (default = 1)
+ * @note This function is not a member of the class
+ */
 void S21Matrix::CreateMatrix(int rows, int cols) {
     this->rows_ = rows;
     this->cols_ = cols;
@@ -15,6 +29,10 @@ void S21Matrix::CreateMatrix(int rows, int cols) {
     }
 }
 
+/**
+ * @brief Delete matrix from memory (free memory) and set rows and columns to zero (0)
+ * @note This function is not a member of the class
+ */
 void S21Matrix::DeleteMatrix() {
     for (int i = 0; i < rows_; ++i) {
         delete[] this->matrix_[i];
@@ -24,6 +42,13 @@ void S21Matrix::DeleteMatrix() {
     this->cols_ = 0;
 }
 
+/**
+ * @brief Constructor with parameters (rows, cols) and initialize matrix with zeros (0) by default
+ * @param rows number of rows (default = 1)
+ * @param cols number of columns (default = 1)
+ * @throws std::invalid_argument if matrix size is invalid (rows < 1 or cols < 1)
+ * @note This function is not a member of the class
+ */
 S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
     if (rows < 1 || cols < 1) {
         throw std::invalid_argument("Invalid matrix size");
@@ -32,6 +57,11 @@ S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
     }
 }
 
+/**
+ * @brief Copy constructor and copy matrix from other matrix (copy rows, cols and matrix)
+ * @param other matrix to copy
+ * @note This function is not a member of the class
+ */
 S21Matrix::S21Matrix(const S21Matrix &other)
         : rows_(other.rows_), cols_(other.cols_) {
     this->CreateMatrix(other.rows_, other.cols_);
@@ -42,6 +72,11 @@ S21Matrix::S21Matrix(const S21Matrix &other)
     }
 }
 
+/**
+ * @brief Move constructor and move matrix from other matrix (move rows, cols and matrix)
+ * @param other matrix to move
+ * @note This function is not a member of the class
+ */
 S21Matrix::S21Matrix(S21Matrix &&other) {
     this->rows_ = other.rows_;
     this->cols_ = other.cols_;
@@ -51,6 +86,12 @@ S21Matrix::S21Matrix(S21Matrix &&other) {
     other.matrix_ = nullptr;
 }
 
+/**
+ * @brief Compare matrix with matrix (A == B) = true (this == other) = true
+ * @param other matrix to compare
+ * @return true if matrix are equal, false otherwise
+ * @note This function is not a member of the class
+ */
 bool S21Matrix::EqMatrix(const S21Matrix &other) {
     if (this->rows_ != other.rows_ || this->cols_ != other.cols_) {
         return false;
@@ -66,6 +107,13 @@ bool S21Matrix::EqMatrix(const S21Matrix &other) {
     }
 }
 
+/**
+ * @brief Sum matrix with matrix (A + B) = C (this + other = result)
+ * @param other matrix to sum with this matrix (B)
+ * @return result of summation (C)
+ * @throws std::invalid_argument if matrix sizes are not equal
+ * @note This function is not a member of the class
+ */
 void S21Matrix::SumMatrix(const S21Matrix &other) {
     if (this->rows_ != other.rows_ || this->cols_ != other.cols_) {
         throw std::invalid_argument("Invalid matrix size");
@@ -78,6 +126,13 @@ void S21Matrix::SumMatrix(const S21Matrix &other) {
     }
 }
 
+/**
+ * @brief Subtract matrix from matrix (A - B) = C (this - other = result)
+ * @param other matrix to subtract from this matrix (B)
+ * @return result of subtraction (C)
+ * @throws std::invalid_argument if matrix sizes are not equal
+ * @note This function is not a member of the class
+ */
 void S21Matrix::SubMatrix(const S21Matrix &other) {
     if (this->rows_ != other.rows_ || this->cols_ != other.cols_) {
         throw std::invalid_argument("Invalid matrix size");
@@ -108,6 +163,7 @@ void S21Matrix::MulNumber(const double number) {
  * @brief Multiply matrix by matrix (matrix multiplication) (A * B) = C (this * other = result)
  * @param other matrix to multiply by this matrix (B)
  * @return result of multiplication (C)
+ * @throw std::invalid_argument if matrix sizes are not equal
  * @note This function is not a member of the class
  */
 void S21Matrix::MulMatrix(const S21Matrix &other) {
@@ -130,4 +186,19 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
         result.cols_ = 0;
         result.matrix_ = nullptr;
     }
+}
+
+/**
+* @brief Transpose matrix (A^T) = B (this^T = result)
+* @return result of transposition (B)
+* @note This function is not a member of the class
+*/
+S21Matrix S21Matrix::Transpose() {
+    S21Matrix result(this->rows_, this->cols_);
+    for (int i = 0; i < this->rows_; ++i) {
+        for (int j = 0; j < this->cols_; ++j) {
+            result.matrix_[i][j] = this->matrix_[j][i];
+        }
+    }
+    return result;
 }
