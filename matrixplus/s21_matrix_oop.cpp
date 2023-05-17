@@ -80,3 +80,15 @@ void S21Matrix::SumMatrix(const S21Matrix &other) {
         }
     }
 }
+
+void S21Matrix::SubMatrix(const S21Matrix &other) {
+    if (this->rows_ != other.rows_ || this->cols_ != other.cols_) {
+        throw std::invalid_argument("Invalid matrix size");
+    } else {
+        for (int i = 0; i < this->rows_; ++i) {
+            for (int j = 0; j < this->cols_; ++j) {
+                this->matrix_[i][j] -= other.matrix_[i][j];
+            }
+        }
+    }
+}
