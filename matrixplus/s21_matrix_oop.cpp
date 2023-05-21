@@ -194,10 +194,10 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 * @note This function is not a member of the class
 */
 S21Matrix S21Matrix::Transpose() {
-    S21Matrix result(this->rows_, this->cols_);
+    S21Matrix result(this->cols_, this->rows_);
     for (int i = 0; i < this->rows_; ++i) {
         for (int j = 0; j < this->cols_; ++j) {
-            result.matrix_[i][j] = this->matrix_[j][i];
+            result.matrix_[j][i] = this->matrix_[i][j];
         }
     }
     return result;
