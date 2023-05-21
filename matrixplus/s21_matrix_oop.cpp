@@ -12,7 +12,7 @@ S21Matrix::S21Matrix() : rows_(1), cols_(1) {
  * @brief Destructor and delete matrix from memory (free memory)
  * @note This function is not a member of the class
  */
-S21Matrix::~S21Matrix() { DeleteMatrix(); }
+S21Matrix::~S21Matrix() { this->DeleteMatrix(); }
 
 /**
  * @brief Allocate memory for matrix (allocate memory for rows and columns) and initialize matrix with zeros (0) by default
@@ -201,4 +201,38 @@ S21Matrix S21Matrix::Transpose() {
         }
     }
     return result;
+}
+
+/**
+ * @brief Calculate determinant of matrix (|A|) = det(A) (this = A) (this = result)
+ * @return determinant of matrix (det(A))
+ * @throw std::invalid_argument if matrix is not square (rows != cols) or matrix is empty (rows = 0 or cols = 0)
+ * @note This function is not a member of the class
+ */
+double S21Matrix::Determinant() {
+    if (this->rows_ != this->cols_ || this->rows_ <= 0 && this->cols_ <= 0) {
+        throw std::invalid_argument("Invalid matrix size");
+    } else {
+        double det = 0;
+        if (this->rows_ == 1) {
+            det = this->matrix_[0][0];
+        } else if (this->rows_ == 2) {
+            det = this->matrix_[0][0] * this->matrix_[1][1] - this->matrix_[0][1] * this->matrix_[1][0];
+        } else {
+            for (int i = 0; i < this->rows_; ++i) {
+                S21Matrix minor(this->rows_ - 1, this->cols_ - 1);
+                for (int j = 1; j < this->rows_; ++j) {
+                    for (int k = 0; k < this->cols_; ++k) {
+                        if (k < i) {
+                            minor.matrix_[j - 1][k] = this->matrix_[j][k];
+                        } else if (k > i) {
+                            minor.matrix_[j - 1][k - 1] = this->matrix_[j][k];
+                        }
+                    }
+                }
+                det += pow(-1, i) * this->matrix_[0][i] * minor.Determinant();
+            }
+        }
+        return det;
+    }
 }
