@@ -77,7 +77,7 @@ S21Matrix::S21Matrix(const S21Matrix &other)
  * @param other matrix to move
  * @note This function is not a member of the class
  */
-S21Matrix::S21Matrix(S21Matrix &&other) {
+S21Matrix::S21Matrix(S21Matrix &&other) noexcept {
     this->rows_ = other.rows_;
     this->cols_ = other.cols_;
     this->matrix_ = other.matrix_;
@@ -236,3 +236,34 @@ double S21Matrix::Determinant() {
         return det;
     }
 }
+
+/**
+ * @brief Calculate the algebraic complement of the matrix (A*) = B
+ * @return algebraic complement of the matrix (B)
+ * @throw std::invalid_argument if matrix is not square (rows != cols) or matrix is empty (rows = 0 or cols = 0)
+ * @note This function is not a member of the class
+ */
+S21Matrix S21Matrix::CalcComplements() {
+    S21Matrix result(this->rows_, this->cols_);
+    for (int i = 0; i < this->rows_; ++i) {
+        for (int j = 0; j < this->cols_; ++j) {
+            S21Matrix minor(this->rows_ - 1, this->cols_ - 1);
+            for (int k = 0; k < this->rows_; ++k) {
+                for (int l = 0; l < this->cols_; ++l) {
+                    if (k < i && l < j) {
+                        minor.matrix_[k][l] = this->matrix_[k][l];
+                    } else if (k < i && l > j) {
+                        minor.matrix_[k][l - 1] = this->matrix_[k][l];
+                    } else if (k > i && l < j) {
+                        minor.matrix_[k - 1][l] = this->matrix_[k][l];
+                    } else if (k > i && l > j) {
+                        minor.matrix_[k - 1][l - 1] = this->matrix_[k][l];
+                    }
+                }
+            }
+            result.matrix_[i][j] = pow(-1, i + j) * minor.Determinant();
+        }
+    }
+    return result;
+}
+
