@@ -40,3 +40,32 @@ S21Matrix::~S21Matrix() {
   }
   delete[] matrix_;
 }
+
+S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
+  if (this != &other) {
+    // Deallocate current memory
+    for (int i = 0; i < rows_; ++i) {
+      delete[] matrix_[i];
+    }
+    delete[] matrix_;
+
+    // Copy dimensions
+    rows_ = other.rows_;
+    cols_ = other.cols_;
+
+    if (rows_ <= 0 || cols_ <= 0) {
+      throw std::invalid_argument(
+          "Invalid matrix dimensions. Rows and columns must be greater than "
+          "0.");
+    }
+
+    // Allocate memory for the new matrix
+    matrix_ = new double *[rows_];
+    for (int i = 0; i < rows_; ++i) {
+      matrix_[i] = new double[cols_];
+      // Copy the elements from the other matrix
+      std::copy(other.matrix_[i], other.matrix_[i] + cols_, matrix_[i]);
+    }
+  }
+  return *this;
+}
