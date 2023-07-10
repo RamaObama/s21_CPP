@@ -60,6 +60,25 @@ S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
   return result;
 }
 
+// Binary subtraction operator
+S21Matrix S21Matrix::operator-(const S21Matrix &other) const {
+  if (rows_ != other.rows_ || cols_ != other.cols_) {
+    throw std::invalid_argument(
+        "Matrix dimensions are incompatible for subtraction.");
+  }
+
+  S21Matrix result(rows_, cols_);
+
+  for (int i = 0; i < rows_; ++i) {
+    for (int j = 0; j < cols_; ++j) {
+      // Perform elemnt-wise subtraction
+      result.matrix_[i][j] = matrix_[i][j] - other.matrix_[i][j];
+    }
+  }
+
+  return result;
+}
+
 // Assignment operator
 S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
   if (this != &other) {
